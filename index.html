@@ -179,15 +179,14 @@
             </div>
     
             <!-- David Portrait Image -->
-            <div class="flex justify-center w-full mb-12">
-                <div
-                    class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-white/5 backdrop-blur">
-                    <img src="Images/Dave.jpeg" alt="David Brown"
-                        class="w-40 sm:w-56 md:w-64 lg:w-72 h-auto object-cover"
-                        onerror="this.onerror=null;this.src='https://placehold.co/800x900/000000/FFF?text=Photo+Coming+Soon';" />
-                </div>
-            </div>
-        </div>
+       <div class="flex justify-center w-full mb-12">
+    <div
+        class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-white/5 backdrop-blur">
+        <img src="Images/Dave.jpeg" alt="David Brown"
+            class="w-80 sm:w-96 md:w-[28rem] lg:w-[32rem] h-auto object-cover"
+            onerror="this.onerror=null;this.src='https://placehold.co/800x900/000000/FFF?text=Photo+Coming+Soon';" />
+    </div>
+</div>
     
         <!-- Bouncing Arrow -->
         <div class="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce opacity-50">
@@ -548,51 +547,51 @@ We appreciate everything you do, and we’re excited for you to spend more time 
          * Populates the tribute cards on the main page.
          */
         function populateTributes() {
-            const container = document.getElementById('tributes-grid');
-            container.innerHTML = TRIBUTES.map(tribute => `
-                <div 
-                    class="group relative h-[400px] md:h-[500px] rounded-xl overflow-hidden cursor-pointer shadow-2xl tribute-card"
-                    data-tribute-id="${tribute.id}"
+                const container = document.getElementById('tributes-grid');
+                container.innerHTML = TRIBUTES.map(tribute => `
+        <div 
+            class="group relative h-[520px] md:h-[500px] rounded-xl overflow-hidden cursor-pointer shadow-2xl tribute-card"
+            data-tribute-id="${tribute.id}"
+        >
+            <!-- Image -->
+            <img 
+                src="${tribute.image}" 
+                alt="${tribute.author}" 
+                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                onerror="this.onerror=null;this.src='https://placehold.co/600x800/888/333?text=Photo+Missing';"
+            />
+            
+            <!-- Dark Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+            
+            <!-- Content Overlay -->
+            <div class="absolute inset-0 flex flex-col justify-end p-6 md:p-8 text-center">
+                <!-- Role/Title: Visible on mobile, fades in on desktop hover -->
+                <p class="text-amber-500 text-[10px] md:text-xs font-bold uppercase tracking-widest mb-2 transition-all duration-500
+                    md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100"
                 >
-                    <!-- Image -->
-                    <img 
-                        src="${tribute.image}" 
-                        alt="${tribute.author}" 
-                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        onerror="this.onerror=null;this.src='https://placehold.co/600x800/888/333?text=Photo+Missing';"
-                    />
-                    
-                    <!-- Dark Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                    
-                    <!-- Content Overlay -->
-                    <div class="absolute inset-0 flex flex-col justify-end p-6 md:p-8 text-center">
-                        <!-- Role/Title: Visible on mobile, fades in on desktop hover -->
-                        <p class="text-amber-500 text-[10px] md:text-xs font-bold uppercase tracking-widest mb-2 transition-all duration-500
-                            md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100"
-                        >
-                            ${tribute.role}
-                        </p>
-                        
-                        <h3 class="text-2xl md:text-3xl font-serif text-white mb-6 transform transition-transform duration-500 group-hover:-translate-y-2">${tribute.author}</h3>
-                        
-                        <!-- Button: Visible on mobile, fades in on desktop hover -->
-                        <div class="transition-all duration-500 delay-100 
-                            md:translate-y-8 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100"
-                        >
-                            <button class="inline-flex items-center gap-2 px-5 py-2 bg-amber-600/20 border border-amber-500/50 rounded-full text-amber-300 text-xs md:text-sm uppercase tracking-wide hover:bg-amber-600 hover:text-white transition-all read-tribute-btn">
-                                Read Tribute
-                            </button>
-                        </div>
-                    </div>
+                    ${tribute.role}
+                </p>
+                
+                <h3 class="text-2xl md:text-3xl font-serif text-white mb-6 transform transition-transform duration-500 group-hover:-translate-y-2">${tribute.author}</h3>
+                
+                <!-- Button: Visible on mobile, fades in on desktop hover -->
+                <div class="transition-all duration-500 delay-100 
+                    md:translate-y-8 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100"
+                >
+                    <button class="inline-flex items-center gap-2 px-5 py-2 bg-amber-600/20 border border-amber-500/50 rounded-full text-amber-300 text-xs md:text-sm uppercase tracking-wide hover:bg-amber-600 hover:text-white transition-all read-tribute-btn">
+                        Read Tribute
+                    </button>
                 </div>
-            `).join('');
+            </div>
+        </div>
+    `).join('');
 
-            // Add click listeners to the dynamically created cards
-            document.querySelectorAll('.tribute-card').forEach(card => {
-                card.addEventListener('click', (e) => {
-                    const id = card.getAttribute('data-tribute-id');
-                    showTributeDetail(id);
+                // Add click listeners to the dynamically created cards
+                document.querySelectorAll('.tribute-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const id = card.getAttribute('data-tribute-id');
+                        showTributeDetail(id);
                 });
             });
         }
