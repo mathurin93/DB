@@ -32,13 +32,19 @@
 
             /* Adjusted for triple duplication, based on 33.3333vw width per item */
             100% {
-                transform: translateX(-33.3333%);
+                transform: translateX(-40%);
             }
         }
 
         .animate-scroll {
-            animation: scroll 40s linear infinite;
+            animation: scroll 70s linear infinite;
         }
+        /* Mobile speed (smaller screens) */
+@media (max-width: 767px) {
+    .animate-scroll {
+        animation-duration: 75s; /* faster scroll on mobile */
+    }
+}
 
         .animate-fadeIn {
             animation: fadeIn 0.5s ease-out forwards;
@@ -101,6 +107,11 @@
         .overflow-hidden-mobile {
             overflow: hidden;
         }
+        #gallery-scroller {
+    touch-action: pan-x; /* allows horizontal scrolling gestures without pausing animation */
+    -webkit-overflow-scrolling: auto; /* avoids iOS momentum issues */
+}
+
     </style>
 </head>
 
@@ -404,12 +415,19 @@
                 </div>
 
                 <div class="flex overflow-hidden">
-                    <div id="gallery-scroller" class="flex animate-scroll hover:[animation-play-state:paused] w-[300%]">
+                    <div id="gallery-scroller" class="flex animate-scroll hover:[animation-play-state:paused]">
                         <!-- Gallery images dynamically populated here (repeated 3x for loop) -->
                     </div>
                 </div>
             </div>
         </section>
+        <!-- Gallery Lightbox Overlay -->
+        <div id="gallery-overlay" class="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50 hidden">
+            <button id="gallery-close" class="absolute top-4 right-4 text-white text-3xl font-bold z-50">&times;</button>
+            <img id="gallery-overlay-img" src="" alt="Gallery Full View"
+                class="max-h-full max-w-full rounded-xl shadow-2xl object-contain" />
+        </div>
+
 
         <!-- NEW: Community Tribute Wall Section -->
         <section id="community-tributes" class="py-16 md:py-24 bg-zinc-950 relative">
@@ -659,8 +677,23 @@ We appreciate everything you do, and we’re excited for you to spend more time 
             { src: "Images/Ten.jpeg", alt: "Appreciation" },
             { src: "Images/Eleven.jpeg", alt: "Group Photo" },
             { src: "Images/Twelve.jpeg", alt: "David Brown" },
+            { src: "Images/Thirteen.jpeg", alt: "Celebration" },
+            { src: "Images/Fourteen.jpeg", alt: "Memories" },
+            { src: "Images/Fifteen.jpeg", alt: "Joyful Moments" },
+            { src: "Images/Sixteen.jpeg", alt: "Graduation Moment" },
+            { src: "Images/Seventeen.jpeg", alt: "Retirement Party" },
+            { src: "Images/Eighteen.jpeg", alt: "Memories" },
+            { src: "Images/Nineteen.jpeg", alt: "Joyful Moments" },
+            { src: "Images/Twenty.jpeg", alt: "Appreciation" },  
+            { src: "Images/TwentyOne.jpeg", alt: "Group Photo" },
+            { src: "Images/TwentyTwo.jpeg", alt: "David Brown" },
+            { src: "Images/TwentyThree.jpeg", alt: "Celebration" },
+            { src: "Images/TwentyFour.jpeg", alt: "Memories" },
+            { src: "Images/TwentyFive.jpeg", alt: "Joyful Moments" },
+            { src: "Images/TwentySix.jpeg", alt: "Graduation Moment" },
+            { src: "Images/TwentySeven.jpeg", alt: "Retirement Party" }
         ];
-
+            
 
         // --- Core Functions ---
 
@@ -847,23 +880,49 @@ We appreciate everything you do, and we’re excited for you to spend more time 
          * Populates the scrolling gallery with images, repeated 3 times.
          */
         function populateGallery() {
-            const container = document.getElementById('gallery-scroller');
-            let galleryHTML = '';
-            // Repeat the images 3 times for seamless looping
-            for (let i = 0; i < 3; i++) {
-                galleryHTML += GALLERY_IMAGES.map(img => `
-                    <div class="flex-shrink-0 w-80 md:w-[33.3333vw] lg:w-96 p-2">
-                        <img 
-                            src="${img.src}" 
-                            alt="${img.alt}" 
-                            class="w-full h-64 md:h-80 object-cover rounded-xl shadow-xl border border-zinc-800 transition-shadow duration-300 hover:shadow-amber-500/30"
-                            onerror="this.onerror=null;this.src='https://placehold.co/400x300/333/FFF?text=Image+Error';"
-                        />
-                    </div>
-                `).join('');
+                const container = document.getElementById('gallery-scroller');
+                let galleryHTML = '';
+
+                // Repeat images 2x for smooth loop
+                for (let i = 0; i < 2; i++) {
+                    galleryHTML += GALLERY_IMAGES.map(img => `
+            <div class="flex-shrink-0 w-80 md:w-[33.3333vw] lg:w-96 p-2">
+                <img 
+                    src="${img.src}" 
+                    alt="${img.alt}" 
+                    class="w-full h-64 md:h-80 object-cover rounded-xl shadow-xl border border-zinc-800 transition-shadow duration-300 hover:shadow-amber-500/30 cursor-pointer"
+                    onerror="this.onerror=null;this.src='https://placehold.co/400x300/333/FFF?text=Image+Error';"
+                />
+            </div>
+        `).join('');
+                }
+
+                container.innerHTML = galleryHTML;
+
+                // Lightbox functionality
+                const overlay = document.getElementById('gallery-overlay');
+                const overlayImg = document.getElementById('gallery-overlay-img');
+                const closeBtn = document.getElementById('gallery-close');
+
+                container.querySelectorAll('img').forEach(img => {
+                    img.addEventListener('click', () => {
+                        overlayImg.src = img.src;
+                        overlay.classList.remove('hidden');
+                    });
+                });
+
+                closeBtn.addEventListener('click', () => {
+                    overlay.classList.add('hidden');
+                });
+
+                overlay.addEventListener('click', (e) => {
+                    if (e.target.id === 'gallery-overlay') {
+                        overlay.classList.add('hidden');
+                    }
+                });
             }
-            container.innerHTML = galleryHTML;
-        }
+
+
 
         /**
          * Shows the detailed view of a tribute.
